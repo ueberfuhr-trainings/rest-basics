@@ -21,4 +21,4 @@ Kriterium| SOAP | REST | GraphQL
 -------- |-------- | -------- | --------
 HTTP     | nur Überträger (nur POST, nur 1 URL) | möglichst vollständig | nur Überträger (nur POST, nur 1 URL)
 Austauschformat | XML (SOAP XSD, W3C-Standards) | JSON o.a. (Content Negotiation) | JSON (Query Syntax in Request Body)
-Vorteil | Nutzen der W3C-XML-*-Standards | Kompatibilität mit HTTP-Netzwerk-Komponenten (Proxies, Firewalls,...), einfaches Ansprechen vom Frontend | Dynamische Datenstrukturen bei der Abfrage (Lazy Loading in der Implementierung), JSON erlaubt Aufrufe vom Frontend wie REST
+Vorteil | Nutzen der W3C-XML-*-Standards | Kompatibilität mit HTTP-Netzwerk-Komponenten (Proxies, Firewalls,...), einfaches Ansprechen vom Frontend | 
