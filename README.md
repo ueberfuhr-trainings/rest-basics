@@ -9,6 +9,7 @@ Wir haben diese Microservices-Architektur konzipiert:
 Darauf basierend haben wir unsere REST-API für den _AccountService_ designt:
  - [Formlos](docs/accountservice.md)
  - [OpenAPI](openapi.yml)
+ - [Swagger-UI](https://ralf-ueberfuhr-ars.github.io/rest-basics/swagger-ui/index.html)
  
 ## Zusätzliche Themen:
  - Problem Details: [RFC-9457](https://datatracker.ietf.org/doc/html/rfc9457) (ehem. RFC-7807)
