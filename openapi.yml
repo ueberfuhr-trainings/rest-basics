@@ -58,12 +58,12 @@ paths:
         '403':
           description: User does not have writer access.
   /customers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
     get:
       tags:
         - customers
       summary: Read a single customer
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '200':
           description: Customer was found
@@ -73,24 +73,39 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '404':
           description: Customer could not be found
+    put:
+      tags:
+        - customers
+      summary: Replace a single customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        '204':
+          description: Customer was successfully replaced
+        '400':
+          description: Customer is invalid
+        '404':
+          description: Customer could not be found
     delete:
       tags:
         - customers
       summary: Delete a single customer
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '204':
           description: Customer was deleted successfully
         '404':
           description: Customer not be found
   /customers/{id}/address:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
     get:
       tags:
         - customers
       summary: Read the address of the customer
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '200':
           description: Customer address was found
@@ -106,8 +121,6 @@ paths:
       tags:
         - customers
       summary: Assign address to the customer
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       requestBody:
         content:
           application/json:
@@ -117,15 +130,17 @@ paths:
       responses:
         '204':
           description: Address was successfully assigned
+        '400':
+          description: Address is invalid
         '404':
           description: Customer could not be found
   /customers/{id}/payments/paypal:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
     get:
       tags:
         - payment
       summary: Read PayPal payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '200':
           description: PayPal payment data was found
@@ -143,8 +158,6 @@ paths:
       tags:
         - payment
       summary: Assign PayPal payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       requestBody:
         content:
           application/json:
@@ -160,20 +173,18 @@ paths:
       tags:
         - payment
       summary: Delete PayPal payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '204':
           description: PayPal payment data was successfully deleted
         '404':
           description: Customer could not be found
   /customers/{id}/payments/creditcard:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
     get:
       tags:
         - payment
       summary: Read credit card payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '200':
           description: Credit card payment data was found
@@ -191,8 +202,6 @@ paths:
       tags:
         - payment
       summary: Assign Credit card payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       requestBody:
         content:
           application/json:
@@ -208,8 +217,6 @@ paths:
       tags:
         - payment
       summary: Delete credit card payment data
-      parameters:
-        - $ref: '#/components/parameters/customerId'
       responses:
         '204':
           description: Credit card payment data was successfully deleted
