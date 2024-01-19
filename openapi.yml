@@ -77,6 +77,9 @@ paths:
       tags:
         - customers
       summary: Replace a single customer
+      security:
+        - openId:
+            - writer_access
       requestBody:
         content:
           application/json:
@@ -94,6 +97,9 @@ paths:
       tags:
         - customers
       summary: Delete a single customer
+      security:
+        - openId:
+            - writer_access
       responses:
         '204':
           description: Customer was deleted successfully
@@ -121,6 +127,9 @@ paths:
       tags:
         - customers
       summary: Assign address to the customer
+      security:
+        - openId:
+            - writer_access
       requestBody:
         content:
           application/json:
@@ -158,6 +167,9 @@ paths:
       tags:
         - payment
       summary: Assign PayPal payment data
+      security:
+        - openId:
+            - writer_access
       requestBody:
         content:
           application/json:
@@ -173,6 +185,9 @@ paths:
       tags:
         - payment
       summary: Delete PayPal payment data
+      security:
+        - openId:
+            - writer_access
       responses:
         '204':
           description: PayPal payment data was successfully deleted
@@ -202,6 +217,9 @@ paths:
       tags:
         - payment
       summary: Assign Credit card payment data
+      security:
+        - openId:
+            - writer_access
       requestBody:
         content:
           application/json:
@@ -217,6 +235,9 @@ paths:
       tags:
         - payment
       summary: Delete credit card payment data
+      security:
+        - openId:
+            - writer_access
       responses:
         '204':
           description: Credit card payment data was successfully deleted
