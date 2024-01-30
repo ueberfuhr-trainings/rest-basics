@@ -19,6 +19,11 @@ paths:
       tags:
         - customers
       summary: Read all customers
+      parameters:
+        - name: state
+          in: query
+          schema:
+            $ref: "#/components/schemas/CustomerState"
       responses:
         '200':
           description: Customers were read successfully
@@ -91,6 +96,26 @@ paths:
           description: Customer was successfully replaced
         '400':
           description: Customer is invalid
+        '404':
+          description: Customer could not be found
+    patch:
+      tags:
+        - customers
+      summary: Update the status of the customer
+      security:
+        - openId:
+            - writer_access
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/CustomerPatch'
+        required: true
+      responses:
+        '204':
+          description: Customer state wassuccessfully updated
+        '400':
+          description: Request body is invalid
         '404':
           description: Customer could not be found
     delete:
@@ -245,6 +270,12 @@ paths:
           description: Customer could not be found
 components:
   schemas:
+    CustomerState:
+      type: string
+      enum:
+        - active
+        - locked
+        - disabled
     Customer:
       required:
         - birthdate
@@ -262,6 +293,13 @@ components:
         birthdate:
           type: string
           format: date
+        state:
+          $ref: "#/components/schemas/CustomerState"
+    CustomerPatch:
+      type: object
+      properties:
+        state:
+          $ref: "#/components/schemas/CustomerState"
     Address:
       required:
         - city
@@ -315,4 +353,4 @@ components:
   securitySchemes:
     openId:
       type: openIdConnect
-      openIdConnectUrl: https://<keycloak-server>/.well-known/openid-configuration
+      openIdConnectUrl: https://my-keycloak-server/.well-known/openid-configuration
