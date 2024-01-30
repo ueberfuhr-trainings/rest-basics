@@ -18,6 +18,8 @@ Darauf basierend haben wir unsere REST-API für den _AccountService_ designt:
 
 ## SOAP vs. REST vs. GraphQL
 
+Ein Repository mit Implementierungen für Spring Boot sowie ergänzend gRPC findest Du [hier](https://github.com/ueberfuhr/api-comparison).
+
 Kriterium| SOAP | REST | GraphQL
 -------- |-------- | -------- | --------
 HTTP     | nur Überträger (nur POST, nur 1 URL) | möglichst vollständig | nur Überträger (nur POST, nur 1 URL)
