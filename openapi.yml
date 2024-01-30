@@ -353,4 +353,4 @@ components:
   securitySchemes:
     openId:
       type: openIdConnect
-      openIdConnectUrl: https://<keycloak-server>/.well-known/openid-configuration
+      openIdConnectUrl: https://my-keycloak-server/.well-known/openid-configuration
