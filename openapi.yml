@@ -113,7 +113,7 @@ paths:
         required: true
       responses:
         '204':
-          description: Customer state wassuccessfully updated
+          description: Customer state was successfully updated
         '400':
           description: Request body is invalid
         '404':
