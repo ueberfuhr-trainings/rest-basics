@@ -288,6 +288,7 @@ components:
           readOnly: true
         name:
           minLength: 3
+          maxLength: 100
           type: string
           example: Tom Mayer
         birthdate:
@@ -309,6 +310,7 @@ components:
       properties:
         street:
           minLength: 3
+          maxLength: 100
           type: string
         number:
           type: string
@@ -317,6 +319,7 @@ components:
           type: string
         city:
           minLength: 1
+          maxLength: 100
           type: string
     PayPal:
       required:
@@ -325,6 +328,7 @@ components:
       properties:
         email:
           minLength: 1
+          maxLength: 100
           type: string
     CreditCard:
       required:
@@ -333,7 +337,8 @@ components:
       type: object
       properties:
         number:
-          minLength: 1
+          minLength: 8
+          maxLength: 19
           type: string
         validity:
           pattern: '[0-9]{2}/[0-9]{2}'
