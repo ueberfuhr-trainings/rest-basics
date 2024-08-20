@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   description: API to manage customers
   version: 1.0.0
@@ -290,7 +290,8 @@ components:
           minLength: 3
           maxLength: 100
           type: string
-          example: Tom Mayer
+          examples:
+            - Tom Mayer
         birthdate:
           type: string
           format: date
