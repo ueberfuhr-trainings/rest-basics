@@ -24,15 +24,26 @@ paths:
           in: query
           schema:
             $ref: "#/components/schemas/CustomerState"
+        - name: page
+          in: query
+          required: true
+          schema: 
+            type: integer
+            minimum: 1
+        - name: limit
+          in: query
+          required: true
+          schema: 
+            type: integer
+            maximum: 1000
+            minimum: 10
       responses:
         '200':
           description: Customers were read successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/CustomersList'
     post:
       tags:
         - customers
@@ -276,6 +287,13 @@ components:
         - active
         - locked
         - disabled
+    CustomersList:
+      type: object
+      properties:
+        items:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Customer'
     Customer:
       required:
         - birthdate
