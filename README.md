@@ -12,6 +12,7 @@ Darauf basierend haben wir unsere REST-API für den _AccountService_ designt:
  - [Swagger-UI](https://ueberfuhr-trainings.github.io/rest-basics/swagger-ui/index.html)
  
 ## Zusätzliche Themen:
+ - Pagination: [Visualisierung](https://ueberfuhr-trainings.github.io/rest-basics/docs/pagination.html)
  - Problem Details: [RFC-9457](https://datatracker.ietf.org/doc/html/rfc9457) (ehem. RFC-7807)
  - [Hypermedia APIs](https://www.innoq.com/en/articles/2020/12/rest-apis-with-hal/)
  

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginierung - Kompakte Bestellungs-Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; overflow-x: hidden; }
+
+        /* Sanfter Übergang für die Sichtfenster-Rahmen */
+        .viewport-box {
+            border: 3px solid #6366f1;
+            background-color: rgba(99, 102, 241, 0.05);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            border-radius: 12px;
+        }
+
+        /* Basis-Styling für die Bestellungs-Karten */
+        .item-card {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+        }
+
+        /* Animation für das Hereingleiten einer neuen Bestellung */
+        .item-entering {
+            animation: slideInAndPush 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            overflow: hidden;
+        }
+
+        @keyframes slideInAndPush {
+            0% {
+                opacity: 0;
+                transform: translateY(-100%) scale(0.95);
+                max-height: 0;
+                margin-bottom: 0;
+                filter: brightness(2);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                max-height: 100px;
+                margin-bottom: 0.5rem;
+                filter: brightness(1);
+            }
+        }
+
+        /* Ein dezentes Leuchten für die neue Bestellung */
+        .new-pulse {
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: #3b82f6; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+            70% { border-color: #60a5fa; box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { border-color: #3b82f6; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+
+<div class="max-w-6xl mx-auto">
+    <header class="mb-6 text-center">
+        <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-1">
+            Paginierung verstehen
+        </h1>
+        <p class="text-slate-400 text-base">Stell Dir vor, es geht eine neue Bestellung ein.</p>
+    </header>
+
+    <!-- Steuerung -->
+    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-8 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+        <div class="space-y-0.5">
+            <h3 class="text-base font-bold text-white">Simulation (Page Size: 4)</h3>
+            <p class="text-xs text-slate-400">Kompakte Ansicht zur besseren Übersicht.</p>
+        </div>
+        <div class="flex gap-2">
+            <button id="addBtn" onclick="addItem()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-sm transition-all transform active:scale-95 shadow-lg flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Neue Bestellung
+            </button>
+            <button onclick="resetData()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg font-bold text-sm transition text-slate-300">
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+
+        <!-- Linke Seite: Page-Based -->
+        <div class="space-y-4">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center font-bold text-sm shadow-md">1</div>
+                <div>
+                    <h2 class="text-lg font-bold text-indigo-400 leading-tight">Page-Based (Offset)</h2>
+                    <p class="text-[10px] text-slate-500 italic">Sicht auf Plätze 5 bis 8</p>
+                </div>
+            </div>
+
+            <div class="relative bg-slate-900 rounded-xl p-3 border border-slate-800 min-h-[400px] overflow-hidden shadow-inner">
+                <div id="master-list-page" class="space-y-1.5 opacity-40">
+                    <!-- Inhalt via JS -->
+                </div>
+
+                <div id="viewport-page" class="absolute left-1.5 right-1.5 viewport-box pointer-events-none">
+                    <span class="bg-indigo-600 text-[9px] px-1.5 py-0.5 rounded absolute -top-2.5 left-3 text-white font-bold shadow-sm">SEITE 2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rechte Seite: Cursor-Based -->
+        <div class="space-y-4">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-emerald-600 rounded-md flex items-center justify-center font-bold text-sm shadow-md">2</div>
+                <div>
+                    <h2 class="text-lg font-bold text-emerald-400 leading-tight">Cursor-Based</h2>
+                    <p class="text-[10px] text-slate-500 italic">Sicht folgt ID 9</p>
+                </div>
+            </div>
+
+            <div class="relative bg-slate-900 rounded-xl p-3 border border-slate-800 min-h-[400px] overflow-hidden shadow-inner">
+                <div id="master-list-cursor" class="space-y-1.5 opacity-40">
+                    <!-- Inhalt via JS -->
+                </div>
+
+                <div id="viewport-cursor" class="absolute left-1.5 right-1.5 viewport-box border-emerald-500 bg-emerald-500/5 pointer-events-none">
+                    <span class="bg-emerald-600 text-[9px] px-1.5 py-0.5 rounded absolute -top-2.5 left-3 text-white font-bold shadow-sm">FOLGT INHALT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info-Box -->
+    <div class="mt-8 bg-slate-800/40 p-6 rounded-xl border border-slate-700/50">
+        <div class="grid md:grid-cols-2 gap-6 text-slate-300 text-xs leading-relaxed">
+            <div class="border-l-2 border-indigo-500 pl-3">
+                <p class="font-bold text-indigo-400 mb-1">Page-Based Problem:</p>
+                <p>Fenster bleibt starr auf Position 5-8. Neue Bestellungen von oben drücken alte Daten in das Fenster. Ergebnis: Der User sieht die gleiche Bestellung auf zwei verschiedenen Seiten.</p>
+            </div>
+            <div class="border-l-2 border-emerald-500 pl-3">
+                <p class="font-bold text-emerald-400 mb-1">Cursor-Based Lösung:</p>
+                <p>Fenster ist an ID 9 "festgeklebt". Es gleitet mit, wenn sich die Liste verschiebt. Der Inhalt im Fenster bleibt absolut stabil.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let db = [];
+    let nextId = 13;
+    const itemsPerPage = 4;
+    const pageToView = 2;
+    const cursorAnchorId = 9;
+
+    function initData() {
+        db = [];
+        for(let i = 12; i >= 1; i--) {
+            db.push({ id: i, label: `Bestellung #${i.toString().padStart(3, '0')}`, isNew: false });
+        }
+    }
+
+    function render() {
+        const pageContainer = document.getElementById('master-list-page');
+        const cursorContainer = document.getElementById('master-list-cursor');
+
+        const renderList = () => db.map((item, idx) => {
+            let classes = "item-card p-3 bg-slate-800 rounded-lg border border-slate-700 text-xs flex justify-between shadow-sm";
+            if(item.isNew) classes += " item-entering border-blue-500 bg-slate-700 z-20 new-pulse";
+
+            return `
+                    <div class="${classes}">
+                        <span class="font-bold text-slate-200">${item.label}</span>
+                        <span class="text-[9px] font-mono text-blue-400 bg-blue-900/30 self-center px-1.5 py-0.5 rounded border border-blue-800/30">ID: ${item.id}</span>
+                    </div>
+                `;
+        }).join('');
+
+        const htmlContent = renderList();
+        pageContainer.innerHTML = htmlContent;
+        cursorContainer.innerHTML = htmlContent;
+
+        requestAnimationFrame(() => {
+            setTimeout(updateViewports, 50);
+        });
+    }
+
+    function updateViewports() {
+        const pageVp = document.getElementById('viewport-page');
+        const pageItems = document.querySelectorAll('#master-list-page .item-card');
+        if(pageItems.length >= itemsPerPage * pageToView) {
+            const startNode = pageItems[(pageToView - 1) * itemsPerPage];
+            const endNode = pageItems[pageToView * itemsPerPage - 1];
+            pageVp.style.top = (startNode.offsetTop - 4) + "px";
+            pageVp.style.height = (endNode.offsetTop + endNode.offsetHeight - startNode.offsetTop + 8) + "px";
+        }
+
+        const cursorVp = document.getElementById('viewport-cursor');
+        const cursorItems = document.querySelectorAll('#master-list-cursor .item-card');
+        const anchorIdx = db.findIndex(item => item.id === cursorAnchorId);
+        if(anchorIdx !== -1 && cursorItems[anchorIdx + 1]) {
+            const startNode = cursorItems[anchorIdx + 1];
+            const endNode = cursorItems[Math.min(anchorIdx + itemsPerPage, cursorItems.length - 1)];
+            cursorVp.style.top = (startNode.offsetTop - 4) + "px";
+            cursorVp.style.height = (endNode.offsetTop + endNode.offsetHeight - startNode.offsetTop + 8) + "px";
+        }
+    }
+
+    function addItem() {
+        const btn = document.getElementById('addBtn');
+        btn.disabled = true;
+        db.forEach(i => i.isNew = false);
+        db.unshift({
+            id: nextId,
+            label: `Bestellung #${nextId.toString().padStart(3, '0')}`,
+            isNew: true
+        });
+        nextId++;
+        render();
+        setTimeout(() => { btn.disabled = false; }, 800);
+    }
+
+    function resetData() {
+        initData();
+        nextId = 13;
+        render();
+    }
+
+    initData();
+    window.onload = render;
+    window.onresize = render;
+</script>
+</body>
+</html>
